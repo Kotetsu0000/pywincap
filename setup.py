@@ -23,9 +23,6 @@ ext_modules = [
             "user32.lib",  # EnumWindows, GetWindowTextW などのための追加
         ],
         include_dirs=[
-            #r"C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0",
-            #r"C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\shared",
-            #r"C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt",
             r"C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\cppwinrt",
         ],
         define_macros=[
@@ -38,8 +35,7 @@ ext_modules = [
 setup(
     name="pywincap",
     version="0.1.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Kotetsu0000",
     description="A Python library to capture window contents on Windows using Windows.Graphics.Capture.",
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
