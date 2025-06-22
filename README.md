@@ -1,4 +1,4 @@
-# pywincap
+﻿# pywincap
 
 pywincapは、Windows環境でウィンドウキャプチャを行うためのPythonライブラリです。Windows.Graphics.Captureを使用してウィンドウのコンテンツをキャプチャし、NumPy配列として返すことができます。
 

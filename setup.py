@@ -27,8 +27,6 @@ setup(
     version="0.1.0",
     author="Kotetsu0000",
     description="A Python library to capture window contents on Windows using Windows.Graphics.Capture.",
-    long_description=open('README.md').read(),
-    long_description_content_type='text/markdown',
     package_dir={"": "src"},
     packages=["pywincap"],
     package_data={"pywincap": ["__init__.pyi", "_core.pyi"]},
@@ -38,5 +36,6 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "numpy",
+        "opencv-python"
     ],
 )
