@@ -1,5 +1,4 @@
-﻿// このファイルはUTF-8 with BOMで保存してください
-#include <map>
+﻿#include <map>
 #include <string>
 #include <vector>
 #include <Windows.h>
@@ -30,7 +29,6 @@ namespace pybind11 { namespace detail {
             return false;
         }
         static handle cast(HWND src, return_value_policy /* policy */, handle /* parent */) {
-            // HWNDからPythonのint型に変換
             return PyLong_FromLongLong(reinterpret_cast<intptr_t>(src));
         }
     };

@@ -22,8 +22,6 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 
-// IDirect3DDxgiInterfaceAccess を独自の名前空間内に定義して、
-// グローバル名前空間の汚染を防止
 namespace WinCapInterop {
     #ifndef __IDirect3DDxgiInterfaceAccess_INTERFACE_DEFINED__
     #define __IDirect3DDxgiInterfaceAccess_INTERFACE_DEFINED__
@@ -39,7 +37,6 @@ namespace WinCapInterop {
     #endif // __IDirect3DDxgiInterfaceAccess_INTERFACE_DEFINED__
 }
 
-// --- 実装クラスの定義 ---
 class WindowCapture::Impl {
 public:
     Impl(HWND hwnd);
@@ -66,8 +63,6 @@ private:
     std::mutex _frame_mutex;
     bool _is_closed = false;
 };
-
-// --- WindowCapture::Impl のメソッド実装 ---
 
 WindowCapture::Impl::Impl(HWND hwnd) : _hwnd(hwnd) {
     winrt::init_apartment(winrt::apartment_type::multi_threaded);
@@ -117,13 +112,11 @@ void WindowCapture::Impl::on_frame_arrived(
     auto frame = sender.TryGetNextFrame();
     if (!frame) return;
 
-    // WinRTサーフェスからCOMインターフェースを取得
     auto surface = frame.Surface();
     winrt::com_ptr<WinCapInterop::IDirect3DDxgiInterfaceAccess> access;
     winrt::check_hresult(surface.as<IInspectable>()->QueryInterface(
         __uuidof(WinCapInterop::IDirect3DDxgiInterfaceAccess), access.put_void()));
 
-    // 相互運用インターフェース経由でID3D11Texture2Dを取得
     winrt::com_ptr<ID3D11Texture2D> surface_texture;
     winrt::check_hresult(access->GetInterface(IID_PPV_ARGS(surface_texture.put())));
 
@@ -170,7 +163,6 @@ py::array_t<uint8_t> WindowCapture::Impl::grab_frame() {
     return img;
 }
 
-// --- WindowCapture の実装 (Implへの委譲) ---
 WindowCapture::WindowCapture(HWND hwnd) : pimpl(std::make_unique<Impl>(hwnd)) {}
 WindowCapture::~WindowCapture() = default;
 WindowCapture::WindowCapture(WindowCapture&&) noexcept = default;

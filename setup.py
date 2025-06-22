@@ -5,9 +5,6 @@ from pybind11.setup_helpers import Pybind11Extension, build_ext
 if sys.platform != "win32":
     raise RuntimeError("This package is only supported on Windows.")
 
-# Windows 10 バージョン1903 (19H1) 以降を明示的に指定
-WIN_VERSION = 0x0A00000D  # 1903 (19H1)
-
 ext_modules = [
     Pybind11Extension(
         "pywincap._core",
@@ -21,13 +18,6 @@ ext_modules = [
             "dwmapi.lib",
             "windowsapp.lib",
             "user32.lib",  # EnumWindows, GetWindowTextW などのための追加
-        ],
-        include_dirs=[
-            r"C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\cppwinrt",
-        ],
-        define_macros=[
-            ("WINVER", WIN_VERSION),
-            ("_WIN32_WINNT", WIN_VERSION)
         ],
     ),
 ]

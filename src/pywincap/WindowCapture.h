@@ -3,11 +3,9 @@
 #include <cstdint>
 #include <memory>
 
-// Pybind11
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
-// Windows
 #define NOMINMAX
 #include <Windows.h>
 
@@ -18,7 +16,6 @@ public:
     WindowCapture(HWND hwnd);
     ~WindowCapture();
 
-    // コピーとムーブを禁止
     WindowCapture(const WindowCapture&) = delete;
     WindowCapture& operator=(const WindowCapture&) = delete;
     WindowCapture(WindowCapture&&) noexcept;
@@ -28,7 +25,6 @@ public:
     void close();
 
 private:
-    // Pimplイディオム
     class Impl;
     std::unique_ptr<Impl> pimpl;
 };
