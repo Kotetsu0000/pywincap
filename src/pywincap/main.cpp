@@ -42,6 +42,14 @@ std::string to_utf8(const std::wstring& wstr) {
     return str_to;
 }
 
+std::wstring from_utf8(const std::string& str) {
+    if (str.empty()) return std::wstring();
+    int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+    std::wstring wstr_to(size_needed, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstr_to[0], size_needed);
+    return wstr_to;
+}
+
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
     auto& windows = *reinterpret_cast<std::map<HWND, std::wstring>*>(lParam);
     const int length = GetWindowTextLength(hwnd);
@@ -65,11 +73,35 @@ std::map<long long, std::string> get_capturable_windows() {
     return result;
 }
 
+long long get_hwnd_by_title(const std::string& title_utf8) {
+    const std::wstring title_wide = from_utf8(title_utf8);
+    HWND result = nullptr;
+    
+    std::map<HWND, std::wstring> windows;
+    EnumWindows(EnumWindowsProc, reinterpret_cast<LPARAM>(&windows));
+    
+    for (const auto& pair : windows) {
+        // 完全一致の場合
+        if (pair.second == title_wide) {
+            return reinterpret_cast<long long>(pair.first);
+        }
+        // 部分一致の場合
+        if (pair.second.find(title_wide) != std::wstring::npos) {
+            result = pair.first;
+        }
+    }
+    
+    return reinterpret_cast<long long>(result);
+}
+
 PYBIND11_MODULE(_core, m) {
     m.doc() = "Core implementation for pywincap";
 
     m.def("get_capturable_windows", &get_capturable_windows, 
         "Returns a dictionary of capturable windows {hwnd: title}");
+      m.def("get_hwnd_by_title", &get_hwnd_by_title, py::arg("title"),
+        "Returns the window handle as a long long integer for a window with the given title. "
+        "Returns 0 if no window with the exact title is found.");
 
     py::class_<WindowCapture>(m, "WindowCapture")
         .def(py::init([](intptr_t hwnd) {
