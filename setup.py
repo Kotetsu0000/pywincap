@@ -31,6 +31,7 @@ setup(
     long_description_content_type='text/markdown',
     package_dir={"": "src"},
     packages=["pywincap"],
+    package_data={"pywincap": ["__init__.pyi", "_core.pyi"]},
     ext_modules=ext_modules,
     cmdclass={"build_ext": build_ext},
     zip_safe=False,
