@@ -24,7 +24,7 @@ ext_modules = [
 
 setup(
     name="pywincap",
-    version="1.0.0",
+    version="1.1.0",
     author="Kotetsu0000",
     description="A Python library to capture window contents on Windows using Windows.Graphics.Capture.",
     package_dir={"": "src"},

@@ -126,7 +126,6 @@ void WindowCapture::Impl::on_frame_arrived(
 
 py::array_t<uint8_t> WindowCapture::Impl::grab_frame() {
     if (_is_closed) throw std::runtime_error("Capture session is closed.");
-    Sleep(50); 
 
     winrt::com_ptr<ID3D11Texture2D> frame_texture;
     {

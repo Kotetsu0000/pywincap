@@ -105,7 +105,9 @@ PYBIND11_MODULE(_core, m) {
 
     py::class_<WindowCapture>(m, "WindowCapture")
         .def(py::init([](intptr_t hwnd) {
-            return std::make_unique<WindowCapture>(reinterpret_cast<HWND>(hwnd));
+            auto wc = std::make_unique<WindowCapture>(reinterpret_cast<HWND>(hwnd));
+            Sleep(50);  // ウィンドウキャプチャ初期化後、50ミリ秒待機
+            return wc;
         }), py::arg("hwnd"), "Initialize capture for a specific window handle.")
         .def("grab_frame", &WindowCapture::grab_frame, "Grabs a single frame and returns it as a NumPy array (BGRA).")
         .def("close", &WindowCapture::close, "Releases all capture resources.");
